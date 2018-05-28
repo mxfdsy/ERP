@@ -1,23 +1,31 @@
 package com.lmfun.common.filter;
 
-import com.google.gson.Gson;
-import com.lmfun.common.constant.Constants;
-import com.lmfun.common.constant.enumeration.BaseCode;
-import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.stereotype.Component;
-import org.springframework.util.AntPathMatcher;
-import org.springframework.util.PathMatcher;
-
-import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
+
+import com.lmfun.common.constant.Constants;
+import com.lmfun.common.constant.enumeration.BaseCode;
+import com.lmfun.common.util.FastJsonUtils;
+import com.lmfun.pojo.dto.user.LoginUserDTO;
 
 /**
  * 使用注解标注过滤器
@@ -65,13 +73,13 @@ public class LoginSessionFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        request.setAttribute("requestId", "");
+        request.setAttribute("requestId", Long.toString(System.currentTimeMillis()));
 
         HttpSession session = request.getSession();
-//TODO Becky
-//        LoginUserDTO loginUser = (LoginUserDTO) session.getAttribute(Constants.LOGIN_USER);
         
-        if (null != "") {
+        LoginUserDTO loginUser = (LoginUserDTO) session.getAttribute(Constants.LOGIN_USER);
+        
+        if (null != loginUser) {
             // 已登录
             chain.doFilter(request, response);
             return;
@@ -79,15 +87,14 @@ public class LoginSessionFilter implements Filter {
 
             Map<String, Object> responseObject = new HashMap<>();
             responseObject.put("code", BaseCode.SESSION_INVALID.getCode());
-            responseObject.put("errorMsg", BaseCode.SESSION_INVALID.getMessage());
+            responseObject.put("error_msg", BaseCode.SESSION_INVALID.getMessage());
             responseObject.put("referer", request.getHeader("referer"));
             session.setAttribute("redirectUrl", request.getHeader("referer"));//把url放到session
 
             response.setContentType("application/json;charset=utf-8");
             response.setStatus(BaseCode.SESSION_INVALID.getCode());
             java.io.PrintWriter out = response.getWriter();
-            Gson gson = new Gson();
-            out.write(gson.toJson(responseObject));
+            out.write(FastJsonUtils.toJSONString(responseObject));
             out.flush();
             out.close();
         } else {
@@ -125,7 +132,6 @@ public class LoginSessionFilter implements Filter {
                 || uri.equals("/password/reset.html")
                 || uri.endsWith("/authenticate")
                 || uri.endsWith("/logout")
-                || (uri.startsWith("/lmf/") && uri.endsWith("/callback"))
                 ) {
             return true;
         }
