@@ -1,4 +1,4 @@
-package com.lmfun.mapper;
+package com.lmfun.mapper.common;
 
 import org.apache.ibatis.annotations.Mapper;
 
