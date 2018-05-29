@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmfun.mapper.trace.UserOperationTraceMapper">
+    <insert id="insertUserOperationTrace" parameterType="com.lmfun.pojo.po.trace.UserOperationTracePO">
+        insert into tnt_biz_erp_user_operation_trace
+        (
+            user_operation_trace_uid,created_at,created_by,updated_at,updated_by,archive,operator_user_uid,operator_phone,
+            operatior_name,remote_address,browser_name,operation_time,operation_name,business_type,business_uids,execute_time,is_succeed,original_value,new_value,description
+        )
+        values (
+            tnt_uuid_short(),
+            #{createdAt},
+            #{createdBy},
+            #{updatedAt},
+            #{updatedBy},
+            #{archive},
+            #{operatorUserUid},
+            #{operatorPhone},
+            #{operatorName},
+            #{remoteAddress},
+            #{browserName},
+            #{operationTime},
+            #{operationName},
+            #{businessType},
+            #{businessUids},
+            #{executeTime},
+            #{isSucceed},
+            #{originalValue},
+            #{newValue},
+            #{description}
+        )
+    </insert>
+</mapper>
