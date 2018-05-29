@@ -20,7 +20,7 @@
 		<result column="updated_by" property="updatedBy"/>
 	</resultMap>
 	
-	<select id="listMenuByIds" resultMap="BaseMenuMap">
+	<select id="listMenuByIds" resultMap="menuMap">
 		SELECT 
 			id, menu_uid, menu_icon, menu_icon_checked, name, skip_url, layer, parent, 
 			permission_keys, sort_order, code, created_at, updated_at, created_by, updated_by 
