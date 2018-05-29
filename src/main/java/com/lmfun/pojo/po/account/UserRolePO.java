@@ -1,22 +1,27 @@
-package com.lmfun.pojo.dto.user;
-
-import java.io.Serializable;
-import java.util.List;
+package com.lmfun.pojo.po.account;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
-public class LoginRoleDTO implements Serializable {
-
-    private static final long serialVersionUID = -6544122799775126570L;
-
-    @JSONField(name = "role_uid")
-    private String roleUid;
+public class UserRolePO {
+    @JSONField(name = "user_uid")
+    private String userUid;
     
-    @JSONField(name = "role_key")
-    private String roleKey;
-    
-    @JSONField(name = "mall_uid")
-    public List<String> mallUid;
+	@JSONField(name = "role_uid")
+	private String roleUid;
+	
+	@JSONField(name = "role_key")
+	private String roleKey;
+	
+	@JSONField(name = "mall_uid")
+	private String mallUid;
+
+    public String getUserUid() {
+        return userUid;
+    }
+
+    public void setUserUid(String userUid) {
+        this.userUid = userUid;
+    }
 
     public String getRoleUid() {
         return roleUid;
@@ -34,18 +39,20 @@ public class LoginRoleDTO implements Serializable {
         this.roleKey = roleKey;
     }
 
-    public List<String> getMallUid() {
+    public String getMallUid() {
         return mallUid;
     }
 
-    public void setMallUid(List<String> mallUid) {
+    public void setMallUid(String mallUid) {
         this.mallUid = mallUid;
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("LoginRoleDTO [roleUid=");
+        builder.append("UserRolePO [userUid=");
+        builder.append(userUid);
+        builder.append(", roleUid=");
         builder.append(roleUid);
         builder.append(", roleKey=");
         builder.append(roleKey);
@@ -54,5 +61,4 @@ public class LoginRoleDTO implements Serializable {
         builder.append("]");
         return builder.toString();
     }
-
 }

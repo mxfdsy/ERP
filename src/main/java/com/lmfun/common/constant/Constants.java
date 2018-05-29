@@ -23,7 +23,9 @@ public class Constants {
     public static final String PHONE = "login_user_phone";
     public static final String MENU = "login_user_menu";
     public static final String USER_MALL = "login_user_mall";
-    public static final String USER_SHOP = "login_user_SHOP";
+    public static final String USER_SHOP = "login_user_shop";
+    
+    public static final String VALIDATE_CODE = "validateCode";
 
     public static final String MALL_LIST = "mall_list";
 }

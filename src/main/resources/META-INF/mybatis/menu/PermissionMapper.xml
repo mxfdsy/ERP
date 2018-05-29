@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lmfun.mapper.menu.PermissionMapper">
+	<resultMap id="permissionMap" type="com.lmfun.pojo.po.menu.PermissionPO">
+		<id column="id" property="id"/>
+		<result column="permission_uid" property="permissionUid"/>
+		<result column="permission_key" property="permissionKey"/>
+		<result column="permission_name" property="permissionName"/>
+		<result column="permission_desc" property="permissionDesc"/>
+		<result column="permission_module" property="permissionModule"/>
+		<result column="menu_id" property="menuId"/>
+		<result column="parent_menu_id" property="parentMenuId"/>
+		
+		<result column="created_at" property="createdAt"/>
+		<result column="updated_at" property="updatedAt"/>
+		<result column="created_by" property="createdBy"/>
+		<result column="updated_by" property="updatedBy"/>
+	</resultMap>
+
+    <select id="listPermissionByPermissionKeys" resultMap="permissionMap">
+		SELECT 
+			id, permission_uid, permission_key, permission_name, permission_desc, 
+			permission_module, menu_id, parent_menu_id
+		FROM 
+			tnt_biz_erp_permission 
+		WHERE 
+			permission_key in 
+			<foreach collection="permissionKeys" open="(" close=")" item="permissionKey" separator=",">#{permissionKey}</foreach>
+			AND archive=1 
+	</select>
+</mapper>

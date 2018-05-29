@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lmfun.mapper.account.UserAccountMapper">
+	<resultMap type="com.lmfun.pojo.po.account.UserRolePO" id="userRoleMap">
+		<result column="user_uid" property="userUid"/>
+		<result column="role_uid" property="roleUid"/>
+		<result column="role_key" property="roleKey"/>
+		<result column="mall_uid" property="mallUid"/>
+	</resultMap>
+
+    <select id="listUserRole" resultMap="userRoleMap">
+    	SELECT DISTINCT
+			user_role.user_uid, user_role.role_uid, user_role.mall_uid, role.role_key
+		FROM
+			tnt_biz_erp_user_role user_role
+		INNER JOIN
+			tnt_biz_erp_role role 
+				ON
+			role.archive = 1 AND role.role_uid = user_role.role_uid
+		WHERE
+			user_role.user_uid = #{userUid}
+			AND user_role.archive = 1
+    </select>
+</mapper>
