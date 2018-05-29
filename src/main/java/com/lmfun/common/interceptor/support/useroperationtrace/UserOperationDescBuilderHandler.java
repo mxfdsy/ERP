@@ -19,7 +19,10 @@ public class UserOperationDescBuilderHandler {
     }
 
     public UserOperationDescBuilder getBuilder(String builderName) {
-        return builders.get(builderName);
+        if(builders.containsKey(builderName)) {
+            return builders.get(builderName);
+        }
+        return new DefaultDescBuilder(builderName);
     }
 
     private void registerUserOperationDescBuilder(String builderName, UserOperationDescBuilder userOperationDescBuilder){
