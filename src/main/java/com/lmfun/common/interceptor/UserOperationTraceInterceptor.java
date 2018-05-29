@@ -45,6 +45,7 @@ public class UserOperationTraceInterceptor {
     public Object aroundMethod(ProceedingJoinPoint pjp, UserOperationRecord userOperationRecord) {
         Object result = null;
         UserOperationTracePO userOperationTracePO = new UserOperationTracePO();
+        userOperationTracePO.setArchive(1);
 
         long beginTime = System.currentTimeMillis();
         userOperationTracePO.setOperationName(userOperationRecord.name());

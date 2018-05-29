@@ -12,6 +12,8 @@ public class BasePO {
     
     private String updatedBy;
 
+    private Integer archive;
+
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -42,6 +44,14 @@ public class BasePO {
 
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
+    }
+
+    public Integer isArchive() {
+        return archive;
+    }
+
+    public void setArchive(Integer archive) {
+        this.archive = archive;
     }
 
     @Override
