@@ -5,7 +5,7 @@
         insert into tnt_biz_erp_user_operation_trace
         (
             user_operation_trace_uid,created_at,created_by,updated_at,updated_by,archive,operator_user_uid,operator_phone,
-            operatior_name,remote_address,browser_name,operation_time,operation_name,business_type,business_uids,execute_time,is_succeed,original_value,new_value
+            operatior_name,remote_address,browser_name,operation_time,operation_name,business_type,business_uids,execute_time,is_succeed,original_value,new_value,description
         )
         values (
             tnt_uuid_short(),
@@ -26,7 +26,8 @@
             #{executeTime},
             #{isSucceed},
             #{originalValue},
-            #{newValue}
+            #{newValue},
+            #{description}
         )
     </insert>
 </mapper>

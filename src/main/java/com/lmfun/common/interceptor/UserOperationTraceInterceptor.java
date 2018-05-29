@@ -9,7 +9,8 @@ import com.lmfun.common.interceptor.support.useroperationtrace.UserOperationDesc
 import com.lmfun.common.interceptor.support.useroperationtrace.annotation.UserOperationRecord;
 import com.lmfun.common.util.IpAddressUtil;
 import com.lmfun.common.util.SessionGetter;
-import com.lmfun.pojo.dto.UserOperationTraceDTO;
+import com.lmfun.pojo.po.trace.UserOperationTracePO;
+import com.lmfun.service.trace.UserOperationTraceService;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
@@ -33,9 +35,8 @@ public class UserOperationTraceInterceptor {
 
     private static final int DEFAULT_KEY_LOCATION = -1;
 
-//    @Autowired
-//    @Qualifier("notify_insert_user_operation_trace_channel")
-//    private MessageChannel notifyInsertUserOperationTraceChannel;
+    @Autowired
+    private UserOperationTraceService userOperationTraceService;
 
     @Autowired
     private UserOperationDescBuilderHandler userOperationDescBuilderHandler;
@@ -43,30 +44,30 @@ public class UserOperationTraceInterceptor {
     @Around( value = "execution(public * *(..)) && @annotation(userOperationRecord)")
     public Object aroundMethod(ProceedingJoinPoint pjp, UserOperationRecord userOperationRecord) {
         Object result = null;
-        UserOperationTraceDTO userOperationTraceDTO = new UserOperationTraceDTO();
+        UserOperationTracePO userOperationTracePO = new UserOperationTracePO();
 
         long beginTime = System.currentTimeMillis();
-        userOperationTraceDTO.setOperationName(userOperationRecord.name());
+        userOperationTracePO.setOperationName(userOperationRecord.name());
 
         try {
             //获取相关的business参数
             Object[] args = pjp.getArgs();
-            setBusinessParameters(args, userOperationRecord, userOperationTraceDTO);
-            userOperationTraceDTO.setExecuteTime(System.currentTimeMillis() - beginTime);
-            userOperationTraceDTO.setIsSucceed(1);
+            setBusinessParameters(args, userOperationRecord, userOperationTracePO);
+            userOperationTracePO.setExecuteTime(System.currentTimeMillis() - beginTime);
+            userOperationTracePO.setIsSucceed(1);
         }catch (Throwable throwable) {
             throwable.printStackTrace();
-            userOperationTraceDTO.setIsSucceed(0);
+            userOperationTracePO.setIsSucceed(0);
         }
 
-        asynInsertUserOperationTrace(userOperationTraceDTO);
+        asynInsertUserOperationTrace(userOperationTracePO);
         return result;
     }
 
-    public void setBusinessParameters(Object[] args, UserOperationRecord userOperationRecord, UserOperationTraceDTO userOperationTraceDTO ) {
-        userOperationTraceDTO.setBusinessUids(getBusinessUids(args,userOperationRecord));
-        userOperationTraceDTO.setBusinessType(getBusinessType(userOperationRecord));
-        userOperationTraceDTO.setDescription(userOperationDescBuilderHandler.getBuilder(userOperationRecord.descTemplateName()).builder(userOperationTraceDTO));
+    public void setBusinessParameters(Object[] args, UserOperationRecord userOperationRecord, UserOperationTracePO userOperationTracePO ) {
+        userOperationTracePO.setBusinessUids(getBusinessUids(args,userOperationRecord));
+        userOperationTracePO.setBusinessType(getBusinessType(userOperationRecord));
+        userOperationTracePO.setDescription(userOperationDescBuilderHandler.getBuilder(userOperationRecord.descTemplateName()).builder(userOperationTracePO));
     }
 
     private String getBusinessUids(Object[] args, UserOperationRecord userOperationRecord){
@@ -175,9 +176,10 @@ public class UserOperationTraceInterceptor {
         return userOperationRecord.customizedType();
     }
 
-    public void asynInsertUserOperationTrace(UserOperationTraceDTO userOperationTraceDTO) {
-        userOperationTraceDTO.setOperationTime(Calendar.getInstance().getTime());
-        userOperationTraceDTO.setRemoteAddress(IpAddressUtil.getIpAddr());
+    @Async
+    public void asynInsertUserOperationTrace(UserOperationTracePO userOperationTracePO) {
+        userOperationTracePO.setOperationTime(Calendar.getInstance().getTime());
+        userOperationTracePO.setRemoteAddress(IpAddressUtil.getIpAddr());
 
         //FIXME Hook: Blocked by userLogin, comment out temporary
 //        LoginUserDTO user = SessionGetter.getUser();
@@ -186,7 +188,7 @@ public class UserOperationTraceInterceptor {
 //            userOperationTraceDTO.setOperatorPhone(user.getPhone());
 //            userOperationTraceDTO.setOperatorName(user.getName());
 //        }
-        logger.info("asynInsertUserOperationTrace异步记录客户操作行为，{}", JSON.toJSONString(userOperationTraceDTO));
-//        notifyInsertUserOperationTraceChannel.send(MessageBuilder.withPayload(JSON.toJSONString(userOperationTraceDTO)).build());
+        logger.info("asynInsertUserOperationTrace异步记录客户操作行为，{}", JSON.toJSONString(userOperationTracePO));
+        userOperationTraceService.insertUserOperationTrace(userOperationTracePO);
     }
 }

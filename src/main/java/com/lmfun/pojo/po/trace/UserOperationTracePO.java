@@ -57,6 +57,9 @@ public class UserOperationTracePO extends BasePO {
     @JSONField(name = "new_value")
     private String newValue;
 
+    @JSONField(name = "description")
+    private String description;
+
     public Long getUserOperationTraceUid() {
         return userOperationTraceUid;
     }
@@ -167,6 +170,14 @@ public class UserOperationTracePO extends BasePO {
 
     public void setNewValue(String newValue) {
         this.newValue = newValue;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String toString() {

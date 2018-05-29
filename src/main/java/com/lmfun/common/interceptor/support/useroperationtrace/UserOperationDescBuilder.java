@@ -1,7 +1,7 @@
 package com.lmfun.common.interceptor.support.useroperationtrace;
 
 
-import com.lmfun.pojo.dto.UserOperationTraceDTO;
+import com.lmfun.pojo.po.trace.UserOperationTracePO;
 
 /**
  * @Descriptions:
@@ -10,5 +10,5 @@ import com.lmfun.pojo.dto.UserOperationTraceDTO;
  */
 public interface UserOperationDescBuilder {
 
-    String builder(UserOperationTraceDTO userOperationTraceDTO);
+    String builder(UserOperationTracePO userOperationTracePO);
 }

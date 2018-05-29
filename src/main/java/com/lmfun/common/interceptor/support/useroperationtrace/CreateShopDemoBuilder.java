@@ -1,7 +1,7 @@
 package com.lmfun.common.interceptor.support.useroperationtrace;
 
 
-import com.lmfun.pojo.dto.UserOperationTraceDTO;
+import com.lmfun.pojo.po.trace.UserOperationTracePO;
 
 /**
  * @Descriptions:
@@ -13,7 +13,7 @@ public class CreateShopDemoBuilder implements UserOperationDescBuilder {
     private String DESC_FORMAT = "哥创建了商品‘%s’，这句是直观显示用的";
 
     @Override
-    public String builder(UserOperationTraceDTO userOperationTraceDTO) {
+    public String builder(UserOperationTracePO userOperationTraceDTO) {
         return String.format(DESC_FORMAT, getProductName(userOperationTraceDTO.getBusinessUids()));
     }
 
