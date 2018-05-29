@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lmfun.mapper.account.UserAccountMapper">
+	<resultMap type="com.lmfun.pojo.po.account.UserAccountPO" id="userAccountMap">
+		<result column="user_uid" property="userUid"/>
+		<result column="name" property="name"/>
+		<result column="login_name" property="loginName"/>
+		<result column="phone" property="phone"/>
+		<result column="status" property="status"/>
+		<result column="memo" property="memo"/>
+		
+		<result column="created_at" property="createdAt"/>
+		<result column="created_by" property="createdBy"/>
+		<result column="updated_at" property="updatedAt"/>
+		<result column="updated_by" property="updatedBy"/>
+	</resultMap>
+
+    <select id="getUserAccountByLoginNameAndPassword" resultMap="userAccountMap">
+    	SELECT 
+    		user_uid, name, login_name, phone, status, memo, created_at, updated_at, created_by, updated_by
+    	FROM 
+    		tnt_biz_erp_user_account 
+    	WHERE 
+    		login_name = #{loginName} 
+    		AND password = #{password} 
+    		AND status = 'TYP_ON'
+    </select>
+</mapper>

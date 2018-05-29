@@ -15,6 +15,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.lmfun.common.constant.Constants;
+import com.lmfun.pojo.vo.menu.MenuVO;
+
 @Component
 public class MenuInterceptor implements HandlerInterceptor {
 
@@ -48,8 +51,8 @@ public class MenuInterceptor implements HandlerInterceptor {
     public static void getCodeId(HttpServletRequest request,HttpServletResponse response) {
         HttpSession session = request.getSession();
         String uri = request.getRequestURI();
-//        List<MenuDTO> data = (List<MenuDTO>) session.getAttribute("menu");
-        /*if(data==null||data.size()==0){
+        List<MenuVO> data = (List<MenuVO>) session.getAttribute(Constants.MENU);
+        if(data==null||data.size()==0){
 			try {
 	    		response.setContentType("text/html");
 				response.getWriter().print("<script>document.location.href='/login'</script>");
@@ -60,7 +63,7 @@ public class MenuInterceptor implements HandlerInterceptor {
         }
         if(!isWhite(uri)){
             int resultSkip=0;
-            for(MenuDTO menu:data){
+            for(MenuVO menu:data){
             	if(StringUtils.isNotBlank(menu.getSkipUrl())&& uri.contains(menu.getSkipUrl())){
                 	resultSkip++;
             	}
@@ -78,15 +81,15 @@ public class MenuInterceptor implements HandlerInterceptor {
 
         if (data != null && data.size() > 0) {
 
-            for (MenuDTO menuDTO : data) {
-                String skipURL = menuDTO.getSkipUrl();
+            for (MenuVO menu : data) {
+                String skipURL = menu.getSkipUrl();
                 if (skipURL != null) {
                     if (uri.startsWith(skipURL)) {
-                    	session.setAttribute("menuDTO", menuDTO);
+                    	session.setAttribute("menuDTO", menu);
                     }
                 }
             }           
-        }*/
+        }
     }
     /**
      * 需要不过拦截器的白名单

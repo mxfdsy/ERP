@@ -1,4 +1,4 @@
-package com.lmfun.pojo.vo;
+package com.lmfun.pojo.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -9,6 +9,9 @@ public class BaseResponseDTO {
 
     @JSONField(name = "error_msg")
     private String errorMsg;
+    
+    @JSONField(name = "detail")
+    private String detail;
 
     @JSONField(name = "request_id")
     private String requestId;
@@ -20,18 +23,20 @@ public class BaseResponseDTO {
 
     }
 
-    public BaseResponseDTO(int code, String errorMsg, String requestId, Object data) {
+    public BaseResponseDTO(int code, String errorMsg, String detail, String requestId, Object data) {
         super();
         this.code = code;
         this.errorMsg = errorMsg;
+        this.detail = detail;
         this.requestId = requestId;
         this.data = data;
     }
 
-    public BaseResponseDTO(int code, String errorMsg, Object data) {
+    public BaseResponseDTO(int code, String errorMsg, String detail, Object data) {
         super();
         this.code = code;
         this.errorMsg = errorMsg;
+        this.detail = detail;
         this.requestId = "";
         this.data = data;
     }
@@ -40,6 +45,7 @@ public class BaseResponseDTO {
         super();
         this.code = 200;
         this.errorMsg = "";
+        this.detail = "";
         this.requestId = "";
         this.data = data;
     }
@@ -48,13 +54,23 @@ public class BaseResponseDTO {
         super();
         this.code = 500;
         this.errorMsg = errorMsg;
+        this.detail = errorMsg;
         this.requestId = "";
     }
-
+    
     public BaseResponseDTO(int code, String errorMsg) {
         super();
         this.code = code;
         this.errorMsg = errorMsg;
+        this.detail = errorMsg;
+        this.requestId = "";
+    }
+
+    public BaseResponseDTO(int code, String errorMsg, String detail) {
+        super();
+        this.code = code;
+        this.errorMsg = errorMsg;
+        this.detail = detail;
         this.requestId = "";
     }
 
@@ -72,6 +88,14 @@ public class BaseResponseDTO {
 
     public void setErrorMsg(String errorMsg) {
         this.errorMsg = errorMsg;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
     public String getRequestId() {
