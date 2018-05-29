@@ -7,6 +7,9 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.lmfun.common.constant.Constants;
+import com.lmfun.pojo.dto.user.LoginUserDTO;
+
 
 public class SessionGetter {
     /**
@@ -14,19 +17,19 @@ public class SessionGetter {
      *
      * @return
      */
-   /* public static LoginUserDTO getUser() {
+    public static LoginUserDTO getUser() {
         return (LoginUserDTO) getObjectValue(Constants.LOGIN_USER);
     }
-    */
+   
     /**
      * 登录用户的
      *
      * @return
      */
-   /* public static String getLoginUserUid() {
+    public static String getLoginUserUid() {
         return (String) getObjectValue(Constants.USER_UID);
     }
-*/
+    
     public static String getRequstId() {
         return (String) getObjectValue("requstId");
     }

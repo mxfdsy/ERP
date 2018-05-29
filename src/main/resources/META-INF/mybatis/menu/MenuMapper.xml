@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lmfun.mapper.menu.MenuMapper">
+	<resultMap id="menuMap" type="com.lmfun.pojo.po.menu.MenuPO">
+		<id column="id" property="id"/>
+		<result column="menu_uid" property="menuUid"/>
+		<result column="name" property="name"/>
+		<result column="parent" property="parent"/>
+		<result column="layer" property="layer"/>
+		<result column="sort_order" property="sort"/>
+		<result column="menu_icon" property="menuIcon"/>
+		<result column="menu_icon_checked" property="menuIconChecked"/>
+		<result column="skip_url" property="skipUrl"/>
+		<result column="code" property="code"/>
+		<result column="permission_keys" property="permissionKeys"/>
+		
+		<result column="created_at" property="createdAt"/>
+		<result column="updated_at" property="updatedAt"/>
+		<result column="created_by" property="createdBy"/>
+		<result column="updated_by" property="updatedBy"/>
+	</resultMap>
+	
+	<select id="listMenuByIds" resultMap="BaseMenuMap">
+		SELECT 
+			id, menu_uid, menu_icon, menu_icon_checked, name, skip_url, layer, parent, 
+			permission_keys, sort_order, code, created_at, updated_at, created_by, updated_by 
+		FROM tnt_biz_erp_menu 
+		WHERE 
+			id in <foreach collection="menuIds" item="id" open="(" close=")" separator=",">#{id}</foreach>
+			AND archive = 1 
+	</select>
+
+</mapper>
