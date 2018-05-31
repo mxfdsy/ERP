@@ -29,5 +29,22 @@
 			id in <foreach collection="menuIds" item="id" open="(" close=")" separator=",">#{id}</foreach>
 			AND archive = 1 
 	</select>
+	<select id="listParentMenu" resultMap="menuMap">
+		SELECT
+		id, menu_uid, menu_icon, menu_icon_checked, name, skip_url, layer, parent,
+		permission_keys, sort_order, code, created_at, updated_at, created_by, updated_by
+		FROM tnt_biz_erp_menu
+		WHERE
+		parent =1
+		AND archive = 1
+	</select>
+	<select id="getChild" resultMap="menuMap">
+		SELECT
+		id, menu_uid, menu_icon, menu_icon_checked, name, skip_url, layer, parent,
+		permission_keys, sort_order, code, created_at, updated_at, created_by, updated_by
+		FROM tnt_biz_erp_menu
+		WHERE
+		parent =#{id}
+	</select>
 
 </mapper>

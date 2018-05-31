@@ -1,11 +1,10 @@
 package com.lmfun.service.menu.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import com.lmfun.pojo.vo.menu.ChildMenu;
+import com.lmfun.pojo.vo.menu.ModelMenu;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,4 +59,33 @@ public class MenuServiceImpl implements MenuService {
         return resultMenu;
     }
 
+    @Override
+    public List<ModelMenu> listAllmenu() {
+        //查询出所有的一级菜单
+        List<MenuVO> parentsMenus = menuMapper.listParentMenu();
+
+        //判断集合是否为空
+        if (CollectionUtils.isEmpty(parentsMenus)) {
+            return Collections.emptyList();
+        }
+
+        //往父级菜单中添加数据（子菜单的数据和自身的数据信息）
+        ArrayList<ModelMenu> modelMenus = new ArrayList<>();
+        for (MenuVO parentsMenu:parentsMenus
+             ) {
+            ModelMenu modelMenu = new ModelMenu();
+            modelMenu.setId(parentsMenu.getId());
+            modelMenu.setMenuIcon(parentsMenu.getMenuIcon());
+            modelMenu.setSkipUrl(parentsMenu.getSkipUrl());
+            //插入子菜单
+            modelMenu.setChildMenuList(getChild(parentsMenu.getId()));
+            modelMenus.add(modelMenu);
+        }
+        return modelMenus;
+    }
+
+    private List<ChildMenu> getChild(Integer id) {
+        List<ChildMenu> childMenuList =menuMapper.getChild(id);
+        return childMenuList;
+    }
 }
