@@ -1,6 +1,7 @@
 package com.lmfun.pojo.vo.menu;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.lmfun.pojo.po.menu.MenuPO;
 
 import java.util.List;
 
@@ -9,26 +10,12 @@ import java.util.List;
  * 一级菜单和其对应的子菜单
  */
 public class ModelMenu {
-      @JSONField(name = "parent")
-    private Integer parent;
 
-    @JSONField(name = "sort")
-    private Integer sort;
+    @JSONField(name = "menu_name")
+    private String menuName;
 
-    @JSONField(name = "name")
-    private String name;
-
-    @JSONField(name = "code")
-    private String code;
-
-    @JSONField(name = "layer")
-    private Integer layer;
-
-    @JSONField(name = "id")
-    private Integer id;
-
-    @JSONField(name = "skip_url")
-    private String skipUrl;
+    @JSONField(name = "menu_id")
+    private Integer menuId;
 
     @JSONField(name = "menu_icon")
     private String menuIcon;
@@ -37,62 +24,30 @@ public class ModelMenu {
     private String menuIconChecked;
 
     @JSONField(name = "child_menu")
-    private List<ChildMenu> childMenuList;
+    private List<MenuPO> childMenuList;
 
-    public Integer getParent() {
-        return parent;
+    public void setChildMenuList(List<MenuPO> childMenuList) {
+        this.childMenuList = childMenuList;
     }
 
-    public void setParent(Integer parent) {
-        this.parent = parent;
+    public String getMenuName() {
+        return menuName;
     }
 
-    public Integer getSort() {
-        return sort;
+    public void setMenuName(String menuName) {
+        this.menuName = menuName;
     }
 
-    public void setSort(Integer sort) {
-        this.sort = sort;
+    public List<MenuPO> getChildMenuList() {
+        return childMenuList;
     }
 
-    public String getName() {
-        return name;
+    public Integer getMenuId() {
+        return menuId;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public Integer getLayer() {
-        return layer;
-    }
-
-    public void setLayer(Integer layer) {
-        this.layer = layer;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getSkipUrl() {
-        return skipUrl;
-    }
-
-    public void setSkipUrl(String skipUrl) {
-        this.skipUrl = skipUrl;
+    public void setMenuId(Integer menuId) {
+        this.menuId = menuId;
     }
 
     public String getMenuIcon() {
@@ -111,11 +66,6 @@ public class ModelMenu {
         this.menuIconChecked = menuIconChecked;
     }
 
-    public List<ChildMenu> getChildMenuList() {
-        return childMenuList;
-    }
 
-    public void setChildMenuList(List<ChildMenu> childMenuList) {
-        this.childMenuList = childMenuList;
-    }
+
 }

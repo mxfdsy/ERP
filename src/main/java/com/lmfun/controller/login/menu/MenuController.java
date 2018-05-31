@@ -25,7 +25,6 @@ public class MenuController {
     @ResponseBody
     public String listMenu(@RequestBody String payload) {
         JSONObject jsonObject = JSONObject.parseObject(payload);
-        //
         List<ModelMenu> modelMenulist= menuService.listAllmenu();
         return ResultBuilderUtils.buildSuccess(modelMenulist);
     }

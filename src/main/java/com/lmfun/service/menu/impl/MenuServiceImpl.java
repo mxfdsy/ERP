@@ -3,8 +3,6 @@ package com.lmfun.service.menu.impl;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import ch.qos.logback.core.rolling.helper.IntegerTokenConverter;
-import com.lmfun.pojo.vo.menu.ChildMenu;
 import com.lmfun.pojo.vo.menu.ModelMenu;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,42 +61,37 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<ModelMenu> listAllmenu() {
         //查询出所有的一级菜单
-        List<MenuVO> parentsMenus = menuMapper.listParentMenu();
+        List<MenuPO> parentsMenus = menuMapper.listParentMenu();
 
         //判断集合是否为空
         if (CollectionUtils.isEmpty(parentsMenus)) {
             return Collections.emptyList();
         }
-        //为了让 我们不在循环中去查询数据库 我们先从数据库把数据查出来等用到时直接去缓存中去读取-这里我们得到了1级菜单的id
+        //这里我们得到了1级菜单的id
         List<Integer> parentIds = parentsMenus.stream().map(parentsMenu -> parentsMenu.getId()).collect(Collectors.toList());
 
-        //获取到id 对应菜单的集合
-        Map<Integer, List<ChildMenu>> childparets = mapChildMenu(parentIds);
+        //获取到id 对应菜单的集合 为了让 我们不在循环中去查询数据库 我们先从数据库把数据查出来等用到时直接去缓存中去读取-
+        Map<Integer, List<MenuPO>> childparetsMap = mapChildMenu(parentIds);
 
 
         //往父级菜单中添加数据（子菜单的数据和自身的数据信息）
         ArrayList<ModelMenu> modelMenus = new ArrayList<>();
-        for (MenuVO parentsMenu : parentsMenus
+        for (MenuPO parentsMenu : parentsMenus
                 ) {
             ModelMenu modelMenu = new ModelMenu();
-            modelMenu.setId(parentsMenu.getId());
+            modelMenu.setMenuName(parentsMenu.getName());
             modelMenu.setMenuIcon(parentsMenu.getMenuIcon());
-            modelMenu.setSkipUrl(parentsMenu.getSkipUrl());
+            modelMenu.setMenuIconChecked(parentsMenu.getMenuIconChecked());
             //插入子菜单
-            modelMenu.setChildMenuList(getChild(parentsMenu.getId()));
+            modelMenu.setChildMenuList(childparetsMap.get(parentsMenu.getId()));
             modelMenus.add(modelMenu);
         }
         return modelMenus;
     }
 
-    private Map<Integer, List<ChildMenu>> mapChildMenu(List<Integer> parentIds) {
-        List<ChildMenu> childMenuList = menuMapper.listChildMenu(parentIds);
-        Map<Integer, List<ChildMenu>> childMenus = childMenuList.stream().collect(Collectors.groupingBy(ChildMenu::getParent));
-        return childMenus;
-    }
-
-    private List<ChildMenu> getChild(Integer id) {
-        List<ChildMenu> childMenuList = menuMapper.getChild(id);
-        return childMenuList;
+    private Map<Integer, List<MenuPO>> mapChildMenu(List<Integer> parentIds) {
+        List<MenuPO> childMenuList = menuMapper.listChildMenu(parentIds);
+        Map<Integer, List<MenuPO>> childMenusMap = childMenuList.stream().collect(Collectors.groupingBy(MenuPO::getParent));
+        return childMenusMap;
     }
 }
