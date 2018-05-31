@@ -1,6 +1,7 @@
 package com.lmfun.mapper.menu;
 
 import java.util.List;
+import java.util.Map;
 
 import com.lmfun.pojo.vo.menu.ChildMenu;
 import com.lmfun.pojo.vo.menu.MenuVO;
@@ -17,4 +18,7 @@ public interface MenuMapper {
     List<MenuVO> listParentMenu();
 
     List<ChildMenu> getChild(Integer id);
+
+
+    List<ChildMenu> listChildMenu(@Param("parentids") List<Integer> parentIds);
 }

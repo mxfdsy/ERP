@@ -47,4 +47,13 @@
 		parent =#{id}
 	</select>
 
+	<select id="listChildMenu" resultMap="menuMap">
+		SELECT
+		id, menu_uid, menu_icon, menu_icon_checked, name, skip_url, layer, parent,
+		permission_keys, sort_order, code, created_at, updated_at, created_by, updated_by
+		FROM tnt_biz_erp_menu
+		WHERE
+		parent = <foreach collection="parentids" open="(" close=")" item="id" separator=",">#{id}</foreach>
+	</select>
+
 </mapper>
